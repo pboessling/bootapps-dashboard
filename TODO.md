@@ -1,6 +1,7 @@
 # TODO
 
 ## Tasks
+- Implement checkbox to enable/disable autoreload.
 - Fix TODOs in code.
 - Implement button to reload status of all apps.
 - Implement buttons to reload status of each app separately.

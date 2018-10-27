@@ -87,12 +87,19 @@ var APP = APP || (function () {
             });
         },
 
+        enableAutoreload : function () {
+            var autoreloadTimerId = setInterval(() => APP.reloadAllStatus(), autoreloadInterval);
+        },
+
         /**
          * Initialize the application
          */
         init : function () {
-            //APP.reloadAllEndpoints();
             APP.reloadAllStatus();
+
+            if(autoreload) {
+                APP.enableAutoreload();
+            }
         }
     }
 

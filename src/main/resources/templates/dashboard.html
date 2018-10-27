@@ -8,7 +8,8 @@
 <body>
     <h1>Bootapps Dashboard</h1>
     <!-- TODO: Implement autoreload functionality via checkbox. -->
-    <p th:text="'autoreload: ' + ${autoreload}" />
+    <p th:if="${autoreload}" th:text="'autoreload: every ' + ${autoreloadInterval / 1000} + 's'"></p>
+    <p th:unless="${autoreload}" th:text="'autoreload: off'"></p>
 
     <table id="bootapps" border="1">
         <tr>
@@ -24,6 +25,14 @@
             <td class="bootapp-info" th:attr="data-bootapp-info-url=${bootapp.infoEndpointUrl}">N/A</td>
         </tr>
     </table>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        var autoreload = /*[[${autoreload}]]*/ false;
+        var autoreloadInterval = /*[[${autoreloadInterval}]]*/ 30;
+
+        /*]]>*/
+    </script>
     <script th:src="@{/js/main.js}"></script>
 </body>
 </html>

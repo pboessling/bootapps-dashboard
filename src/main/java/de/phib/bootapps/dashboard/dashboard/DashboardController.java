@@ -22,6 +22,10 @@ public class DashboardController {
 
     private static final String VALUE_NOT_AVAILABLE = "N/A";
 
+    private boolean autoreload;
+
+    private int autoreloadInterval;
+
     private final List<Bootapp> bootapps;
 
     /**
@@ -30,20 +34,24 @@ public class DashboardController {
      */
     @Autowired
     public DashboardController(DashboardProperties dashboardProperties) {
+        this.autoreload = dashboardProperties.getAutoreload();
+        this.autoreloadInterval = dashboardProperties.getAutoreloadInterval();
         this.bootapps = dashboardProperties.getBootapps();
     }
 
     /**
      * Returns the dashboard view.
-     * @param autoreload whether the view should automatically be reloaded
+     * @param autoreloadParam whether the view should automatically be reloaded
      * @param model the model
      * @return the dashboard view
      */
     @GetMapping("/dashboard")
-    public String renderDashboard(@RequestParam(name="autoreload", required=false, defaultValue="false") String autoreload, Model model) {
-        Boolean autoreloadAttribute = autoreload.equals("true");
-        model.addAttribute("autoreload", autoreloadAttribute);
-
+    public String renderDashboard(@RequestParam(name="autoreload", required=false, defaultValue="false") String autoreloadParam, Model model) {
+        // TODO: Overwrite autoreload via request parameter.
+        //Boolean autoreloadAttribute = autoreloadParam.equals("true");
+        //model.addAttribute("autoreload", autoreloadAttribute);
+        model.addAttribute("autoreload", this.autoreload);
+        model.addAttribute("autoreloadInterval", this.autoreloadInterval);
         model.addAttribute("bootapps", bootapps);
 
         return "dashboard";
@@ -84,7 +92,7 @@ public class DashboardController {
             try {
                 LOG.debug("Fetching info for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getInfoEndpointUrl() + "'");
                 info = restTemplate.getForObject(bootapp.getInfoEndpointUrl(), AppInfo.class);
-                LOG.info("Info: " + info.getApp());
+                LOG.debug("Info: " + info.getApp());
             } catch (Exception e) {
                 LOG.error("An error occured why trying to fetch info for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getInfoEndpointUrl() + "'", e);
             }
