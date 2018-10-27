@@ -12,13 +12,14 @@
 
     <table id="bootapps" border="1">
         <tr>
-            <th>App Name</th>
+            <th>App ID</th>
             <th>App Health</th>
             <th>App Info</th>
         </tr>
-        <tr th:id="'bootapp-' + ${bootapp.name}" class="bootapp" th:each="bootapp : ${bootapps}">
-            <td class="bootapp-name" th:text="${bootapp.name}">Bootapp Name</td>
+        <tr th:id="'bootapp-' + ${bootapp.id}" class="bootapp" th:each="bootapp : ${bootapps}">
+            <td class="bootapp-id" th:text="${bootapp.id}">Bootapp Name</td>
             <!-- TODO: Delete data attributes, if no longer needed. -->
+            <!-- TODO: Display link to endpoints. -->
             <td class="bootapp-health" th:attr="data-bootapp-health-url=${bootapp.healthEndpointUrl}">N/A</td>
             <td class="bootapp-info" th:attr="data-bootapp-info-url=${bootapp.infoEndpointUrl}">N/A</td>
         </tr>

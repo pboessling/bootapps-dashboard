@@ -7,9 +7,9 @@ info:
     deploydate: 2018-10-26T10:13:57+00:00
 dashboard:
   bootapps:
-    - name: demo-app
+    - id: demo-app
       health-endpoint-url: http://localhost:8081/actuator/health
       info-endpoint-url: http://localhost:8081/actuator/info
-    - name: bootapps-dashboard
+    - id: bootapps-dashboard
       health-endpoint-url: http://localhost:8080/actuator/health
       info-endpoint-url: http://localhost:8080/actuator/info

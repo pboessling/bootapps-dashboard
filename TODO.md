@@ -1,7 +1,7 @@
 # TODO
 
 ## Tasks
-- Provide a Web API for the frontend to reload the health and info from the backend.
+- Fix TODOs in code.
 - Implement button to reload status of all apps.
 - Implement buttons to reload status of each app separately.
 - Implement checkbox for each app to specify, whether the buttons to reload all endpoints should include this app.

@@ -14,7 +14,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <name>bootapps-dashboard-webapp</name>
+    <id>bootapps-dashboard-webapp</id>
     <description>Bootapps Dashboard</description>
 
     <properties>

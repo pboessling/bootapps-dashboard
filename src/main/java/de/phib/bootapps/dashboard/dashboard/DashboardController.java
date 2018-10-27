@@ -73,29 +73,24 @@ public class DashboardController {
 
             AppHealth health = null;
             try {
-                LOG.debug("Fetching health for bootapp '" + bootapp.getName() + "' from url '" + bootapp.getHealthEndpointUrl() + "'");
+                LOG.debug("Fetching health for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getHealthEndpointUrl() + "'");
                 health = restTemplate.getForObject(bootapp.getHealthEndpointUrl(), AppHealth.class);
                 LOG.debug("Health: " + health.getStatus());
             } catch (Exception e) {
-                LOG.error("An error occured why trying to fetch health for bootapp '" + bootapp.getName() + "' from url '" + bootapp.getHealthEndpointUrl() + "'", e);
+                LOG.error("An error occured why trying to fetch health for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getHealthEndpointUrl() + "'", e);
             }
 
             AppInfo info = null;
             try {
-                LOG.debug("Fetching info for bootapp '" + bootapp.getName() + "' from url '" + bootapp.getInfoEndpointUrl() + "'");
+                LOG.debug("Fetching info for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getInfoEndpointUrl() + "'");
                 info = restTemplate.getForObject(bootapp.getInfoEndpointUrl(), AppInfo.class);
                 LOG.info("Info: " + info.getApp());
             } catch (Exception e) {
-                LOG.error("An error occured why trying to fetch info for bootapp '" + bootapp.getName() + "' from url '" + bootapp.getInfoEndpointUrl() + "'", e);
+                LOG.error("An error occured why trying to fetch info for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getInfoEndpointUrl() + "'", e);
             }
 
                 BootappStatus bootappStatus = new BootappStatus();
-                bootappStatus.setId(bootapp.getName());
-                bootappStatus.setName(bootapp.getName());
-                //TODO: Remove version + deploydate attributes on BootappStatus
-                //bootappStatus.setVersion("version tbd");
-                //bootappStatus.setDeploydate("deploytdate tbd");
-
+                bootappStatus.setId(bootapp.getId());
                 bootappStatus.setHealth((health != null) ? health.getStatus() : VALUE_NOT_AVAILABLE);
                 bootappStatus.setInfo((info != null) ? info.getApp().toString() : VALUE_NOT_AVAILABLE);
 
