@@ -1,7 +1,8 @@
-package de.phib.bootapps.dashboard;
+package de.phib.bootapps.dashboard.dashboard;
 
 public class Bootapp {
 
+    // TODO: Rename to id
     private String name;
 
     private String healthEndpointUrl;

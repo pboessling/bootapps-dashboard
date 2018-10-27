@@ -1,4 +1,4 @@
-package de.phib.bootapps.dashboard;
+package de.phib.bootapps.dashboard.dashboard;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

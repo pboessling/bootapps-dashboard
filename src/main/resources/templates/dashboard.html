@@ -3,24 +3,26 @@
 <head>
     <title>Bootapps Dashboard</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link href="css/main.css" rel="stylesheet">
+    <link th:href="@{/css/main.css}" rel="stylesheet">
 </head>
 <body>
     <h1>Bootapps Dashboard</h1>
+    <!-- TODO: Implement autoreload functionality via checkbox. -->
     <p th:text="'autoreload: ' + ${autoreload}" />
 
     <table id="bootapps" border="1">
         <tr>
-            <th>Bootapp Name</th>
-            <th>Health</th>
-            <th>Info</th>
+            <th>App Name</th>
+            <th>App Health</th>
+            <th>App Info</th>
         </tr>
-        <tr class="bootapp" th:each="bootapp : ${bootapps}">
+        <tr th:id="'bootapp-' + ${bootapp.name}" class="bootapp" th:each="bootapp : ${bootapps}">
             <td class="bootapp-name" th:text="${bootapp.name}">Bootapp Name</td>
-            <td class="bootapp-health" th:attr="data-bootapp-health-url=${bootapp.healthEndpointUrl}">no health available</td>
-            <td class="bootapp-info" th:attr="data-bootapp-info-url=${bootapp.infoEndpointUrl}">no info available</td>
+            <!-- TODO: Delete data attributes, if no longer needed. -->
+            <td class="bootapp-health" th:attr="data-bootapp-health-url=${bootapp.healthEndpointUrl}">N/A</td>
+            <td class="bootapp-info" th:attr="data-bootapp-info-url=${bootapp.infoEndpointUrl}">N/A</td>
         </tr>
     </table>
-    <script src="js/main.js"></script>
+    <script th:src="@{/js/main.js}"></script>
 </body>
 </html>

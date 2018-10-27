@@ -1,6 +1,9 @@
 var APP = APP || (function () {
 
+    var dashboardStatusUrl = '/api/dashboard/status';
+
     return {
+        // TODO: Delete, if no longer needed.
         reloadHealth : function (element, url) {
             if(element && url) {
                 console.debug('Reloading health from url: ' + url);
@@ -12,11 +15,10 @@ var APP = APP || (function () {
                 }).catch(error => {
                     console.error(error);
                 });
-
-                //https://stackoverflow.com/questions/43317967/handle-response-syntaxerror-unexpected-end-of-input-when-using-mode-no-cors/43319482
             }
         },
 
+        // TODO: Delete, if no longer needed.
         reloadInfo : function (element, url) {
             if(element && url) {
                 console.debug('Reloading info from url: ' + url);
@@ -31,6 +33,7 @@ var APP = APP || (function () {
             }
         },
 
+        // TODO: Delete, if no longer needed.
         reloadAllEndpoints : function () {
             var bootapps = document.querySelectorAll('.bootapp');
             bootapps.forEach(function(bootapp) {
@@ -44,8 +47,52 @@ var APP = APP || (function () {
             });
         },
 
+        /**
+         * Reload status for a specific bootapp.
+         * @param element the HTML element encapsulating the bootapp
+         * @param bootappName the name of the bootapp
+         */
+        reloadStatus : function (element, bootappName) {
+            if(element && bootappName) {
+                console.debug('Reloading status for bootapp ' + bootappName);
+
+                var url = dashboardStatusUrl + '/' + bootappName;
+                fetch(url).then(response => {
+                    return response.json();
+                }).then(data => {
+                    console.log(data);
+                }).catch(error => {
+                    console.error(error);
+                });
+            }
+        },
+
+        /**
+         * Reload status for all bootapps.
+         */
+        reloadAllStatus : function () {
+            fetch(dashboardStatusUrl).then(response => {
+                return response.json();
+            }).then(data => {
+                for (var entry in data) {
+                    var bootappStatus = data[entry];
+
+                    // Update the bootapp status in the HTML.
+                    var bootappElement = document.querySelector('#bootapp-' + bootappStatus.id);
+                    bootappElement.querySelector('.bootapp-health').textContent = bootappStatus.health;
+                    bootappElement.querySelector('.bootapp-info').textContent = bootappStatus.info;
+                }
+            }).catch(error => {
+                console.error(error);
+            });
+        },
+
+        /**
+         * Initialize the application
+         */
         init : function () {
-            APP.reloadAllEndpoints();
+            //APP.reloadAllEndpoints();
+            APP.reloadAllStatus();
         }
     }
 
