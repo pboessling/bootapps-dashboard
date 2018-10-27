@@ -10,6 +10,7 @@
     <!-- TODO: Implement autoreload functionality via checkbox. -->
     <p th:if="${autoreload}" th:text="'autoreload: every ' + ${autoreloadInterval / 1000} + 's'"></p>
     <p th:unless="${autoreload}" th:text="'autoreload: off'"></p>
+    <button id="bootapps-status-reload-button" type="button">Reload Status</button>
 
     <table id="bootapps" border="1">
         <tr>

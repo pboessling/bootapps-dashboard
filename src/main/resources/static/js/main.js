@@ -71,6 +71,8 @@ var APP = APP || (function () {
          * Reload status for all bootapps.
          */
         reloadAllStatus : function () {
+            console.debug('Reloading all bootapp statuses');
+
             fetch(dashboardStatusUrl).then(response => {
                 return response.json();
             }).then(data => {
@@ -87,6 +89,10 @@ var APP = APP || (function () {
             });
         },
 
+        registerReloadStatusButton : function () {
+            document.querySelector('#bootapps-status-reload-button').addEventListener('click', APP.reloadAllStatus);
+        },
+
         enableAutoreload : function () {
             var autoreloadTimerId = setInterval(() => APP.reloadAllStatus(), autoreloadInterval);
         },
@@ -96,6 +102,7 @@ var APP = APP || (function () {
          */
         init : function () {
             APP.reloadAllStatus();
+            APP.registerReloadStatusButton();
 
             if(autoreload) {
                 APP.enableAutoreload();

@@ -6,8 +6,8 @@ info:
     version: 1.0-SNAPSHOT
     deploydate: 2018-10-26T10:13:57+00:00
 dashboard:
-  autoreload: true
-  autoreload-interval: 10000
+  autoreload: false
+  autoreload-interval: 30000
   bootapps:
     - id: demo-app
       health-endpoint-url: http://localhost:8081/actuator/health
