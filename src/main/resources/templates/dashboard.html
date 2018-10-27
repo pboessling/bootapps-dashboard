@@ -7,7 +7,6 @@
 </head>
 <body>
     <h1>Bootapps Dashboard</h1>
-    <!-- TODO: Implement autoreload functionality via checkbox. -->
     <p th:if="${autoreload}" th:text="'autoreload: every ' + ${autoreloadInterval / 1000} + 's'"></p>
     <p th:unless="${autoreload}" th:text="'autoreload: off'"></p>
     <button id="bootapps-status-reload-button" type="button">Reload Status</button>
@@ -15,15 +14,18 @@
     <table id="bootapps" border="1">
         <tr>
             <th>App ID</th>
+            <th>Endpoint URLs</th>
             <th>App Health</th>
             <th>App Info</th>
         </tr>
         <tr th:id="'bootapp-' + ${bootapp.id}" class="bootapp" th:each="bootapp : ${bootapps}">
-            <td class="bootapp-id" th:text="${bootapp.id}">Bootapp Name</td>
-            <!-- TODO: Delete data attributes, if no longer needed. -->
-            <!-- TODO: Display link to endpoints. -->
-            <td class="bootapp-health" th:attr="data-bootapp-health-url=${bootapp.healthEndpointUrl}">N/A</td>
-            <td class="bootapp-info" th:attr="data-bootapp-info-url=${bootapp.infoEndpointUrl}">N/A</td>
+            <td class="bootapp-id" th:text="${bootapp.id}">App ID</td>
+            <td class="bootapp-endpoints">
+                <a th:href="${bootapp.healthEndpointUrl}">Health</a> |
+                <a th:href="${bootapp.infoEndpointUrl}">Info</a>
+            </td>
+            <td class="bootapp-health">N/A</td>
+            <td class="bootapp-info">N/A</td>
         </tr>
     </table>
     <script th:inline="javascript">
