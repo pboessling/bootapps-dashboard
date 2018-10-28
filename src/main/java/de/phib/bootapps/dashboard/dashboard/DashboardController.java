@@ -3,10 +3,12 @@ package de.phib.bootapps.dashboard.dashboard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,8 @@ public class DashboardController {
 
     private static final String VALUE_NOT_AVAILABLE = "N/A";
 
+    private RestTemplateBuilder restTemplateBuilder;
+
     private boolean autoreload;
 
     private int autoreloadInterval;
@@ -31,9 +35,11 @@ public class DashboardController {
     /**
      * Builds a new instance of DashboardController.
      * @param dashboardProperties the DashboardProperties
+     * @param restTemplateBuilder  the RestTemplateBuilder
      */
     @Autowired
-    public DashboardController(DashboardProperties dashboardProperties) {
+    public DashboardController(DashboardProperties dashboardProperties, RestTemplateBuilder restTemplateBuilder) {
+        this.restTemplateBuilder = restTemplateBuilder;
         this.autoreload = dashboardProperties.getAutoreload();
         this.autoreloadInterval = dashboardProperties.getAutoreloadInterval();
         this.bootapps = dashboardProperties.getBootapps();
@@ -102,11 +108,10 @@ public class DashboardController {
     }
 
     private BootappStatus fetchStatusFromEndpoints(Bootapp bootapp) {
-        RestTemplate restTemplate = new RestTemplate();
-
         AppHealth health = null;
         try {
             LOG.debug("Fetching health for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getHealthEndpointUrl() + "'");
+            RestTemplate restTemplate = buildRestTemplate(bootapp.getHealthEndpointUsername(), bootapp.getHealthEndpointPassword());
             health = restTemplate.getForObject(bootapp.getHealthEndpointUrl(), AppHealth.class);
             LOG.debug("Health: " + health.getStatus());
         } catch (Exception e) {
@@ -116,6 +121,7 @@ public class DashboardController {
         AppInfo info = null;
         try {
             LOG.debug("Fetching info for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getInfoEndpointUrl() + "'");
+            RestTemplate restTemplate = buildRestTemplate(bootapp.getInfoEndpointUsername(), bootapp.getInfoEndpointPassword());
             info = restTemplate.getForObject(bootapp.getInfoEndpointUrl(), AppInfo.class);
             LOG.debug("Info: " + info.getApp());
         } catch (Exception e) {
@@ -128,6 +134,20 @@ public class DashboardController {
         bootappStatus.setInfo((info != null) ? info.getApp().toString() : VALUE_NOT_AVAILABLE);
 
         return bootappStatus;
+    }
+
+    /**
+     * Builds a RestTemplate with the given basic auth username and password.
+     * @param username the basic auth username
+     * @param password the basic auth password
+     * @return a RestTemplate
+     */
+    private RestTemplate buildRestTemplate(String username, String password) {
+        if(!StringUtils.isEmpty(username)) {
+            return this.restTemplateBuilder.basicAuthorization(username, password).build();
+        } else {
+            return this.restTemplateBuilder.build();
+        }
     }
 
 }

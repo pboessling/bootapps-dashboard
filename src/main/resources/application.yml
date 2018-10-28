@@ -9,9 +9,13 @@ dashboard:
   autoreload: false
   autoreload-interval: 30000
   bootapps:
-    - id: demo-app
-      health-endpoint-url: http://localhost:8081/actuator/health
-      info-endpoint-url: http://localhost:8081/actuator/info
     - id: bootapps-dashboard
       health-endpoint-url: http://localhost:8080/actuator/health
       info-endpoint-url: http://localhost:8080/actuator/info
+    - id: demo-app
+      health-endpoint-url: http://localhost:8081/actuator/health
+      health-endpoint-username: user
+      health-endpoint-password: password
+      info-endpoint-url: http://localhost:8081/actuator/info
+      info-endpoint-username: user
+      info-endpoint-password: password
