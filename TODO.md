@@ -1,8 +1,6 @@
 # TODO
 
 ## Tasks
-- Implement buttons to reload status of each app separately.
-- Fix TODOs in code.
 - Implement possibility to configure basic auth credentials for endpoints.
 - Implement grouping by environments.
 - Implement caching in the backend.

@@ -4,64 +4,20 @@ var APP = APP || (function () {
     var autoreloadTimerId;
 
     return {
-        // TODO: Delete, if no longer needed.
-        reloadHealth : function (element, url) {
-            if(element && url) {
-                console.debug('Reloading health from url: ' + url);
-
-                fetch(url, {mode: 'no-cors'}).then(response => {
-                    return response.json();
-                }).then(data => {
-                    console.log(data);
-                }).catch(error => {
-                    console.error(error);
-                });
-            }
-        },
-
-        // TODO: Delete, if no longer needed.
-        reloadInfo : function (element, url) {
-            if(element && url) {
-                console.debug('Reloading info from url: ' + url);
-
-                fetch(url, {mode: 'no-cors'}).then(response => {
-                    return response.json();
-                }).then(data => {
-                    console.log(data);
-                }).catch(error => {
-                    console.error(error);
-                });
-            }
-        },
-
-        // TODO: Delete, if no longer needed.
-        reloadAllEndpoints : function () {
-            var bootapps = document.querySelectorAll('.bootapp');
-            bootapps.forEach(function(bootapp) {
-                var bootappHealth = bootapp.querySelector('.bootapp-health');
-                var healthUrl = bootappHealth.getAttribute('data-bootapp-health-url');
-                APP.reloadHealth(bootappHealth, healthUrl);
-
-                var bootappInfo = bootapp.querySelector('.bootapp-info');
-                var infoUrl = bootappInfo.getAttribute('data-bootapp-info-url');
-                APP.reloadInfo(bootappInfo, infoUrl);
-            });
-        },
-
         /**
          * Reload status for a specific bootapp.
          * @param element the HTML element encapsulating the bootapp
-         * @param bootappName the name of the bootapp
+         * @param bootappId the name of the bootapp
          */
-        reloadStatus : function (element, bootappName) {
-            if(element && bootappName) {
-                console.debug('Reloading status for bootapp ' + bootappName);
+        reloadStatus : function (element, bootappId) {
+            if(element && bootappId) {
+                console.debug('Reloading status for bootapp ' + bootappId);
 
-                var url = dashboardStatusUrl + '/' + bootappName;
-                fetch(url).then(response => {
+                fetch(dashboardStatusUrl + '/' + bootappId).then(response => {
                     return response.json();
                 }).then(data => {
-                    console.log(data);
+                    console.debug(data);
+                    APP.updateBootappStatusHTML(data);
                 }).catch(error => {
                     console.error(error);
                 });
@@ -77,17 +33,23 @@ var APP = APP || (function () {
             fetch(dashboardStatusUrl).then(response => {
                 return response.json();
             }).then(data => {
+                console.debug(data);
                 for (var entry in data) {
-                    var bootappStatus = data[entry];
-
-                    // Update the bootapp status in the HTML.
-                    var bootappElement = document.querySelector('#bootapp-' + bootappStatus.id);
-                    bootappElement.querySelector('.bootapp-health').textContent = bootappStatus.health;
-                    bootappElement.querySelector('.bootapp-info').textContent = bootappStatus.info;
+                    APP.updateBootappStatusHTML(data[entry]);
                 }
             }).catch(error => {
                 console.error(error);
             });
+        },
+
+        /**
+         * Updates the bootapp status in the HTML.
+         * @param bootappStatus the bootapp status
+         */
+        updateBootappStatusHTML : function (bootappStatus) {
+            var bootappElement = document.querySelector('#bootapp-' + bootappStatus.id);
+            bootappElement.querySelector('.bootapp-health').textContent = bootappStatus.health;
+            bootappElement.querySelector('.bootapp-info').textContent = bootappStatus.info;
         },
 
         /**
@@ -107,13 +69,13 @@ var APP = APP || (function () {
         /**
          * Registers the reload status buttons.
          */
-        // TODO: Rename to registerReloadStatusButtons.
-        registerReloadStatusButton : function () {
+        registerReloadStatusButtons : function () {
             document.querySelector('#bootapps-reload-status-button').addEventListener('click', APP.reloadAllStatus);
 
-            document.querySelectorAll('.bootapp-reload-status-button').forEach(function(elem) {
-                // TODO: Add event listener for each reload button.
-                console.log('bootapp-id: ' + elem.dataset.bootappId);
+            document.querySelectorAll('.bootapp-reload-status-button').forEach(function(button) {
+                button.addEventListener('click', event => {
+                    APP.reloadStatus(event.srcElement, event.srcElement.dataset.bootappId)
+                });
             });
         },
 
@@ -136,7 +98,7 @@ var APP = APP || (function () {
         init : function () {
             APP.reloadAllStatus();
             APP.registerAutoreloadCheckbox();
-            APP.registerReloadStatusButton();
+            APP.registerReloadStatusButtons();
 
             if(autoreload) {
                 APP.enableAutoreload();
