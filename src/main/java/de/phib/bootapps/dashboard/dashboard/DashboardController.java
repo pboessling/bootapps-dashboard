@@ -54,16 +54,6 @@ public class DashboardController {
     }
 
     /**
-     * API function to return all bootapps as JSON.
-     * @return all bootapps as JSON
-     */
-    @GetMapping("/api/dashboard/bootapps")
-    public @ResponseBody
-    List<Bootapp> getBootapps() {
-        return bootapps;
-    }
-
-    /**
      * API function to return the status (health + info) of all bootapps as JSON.
      * @return the status (health + info) of all bootapps as JSON
      */
@@ -73,35 +63,71 @@ public class DashboardController {
         List<BootappStatus> bootappStatuses = new ArrayList<>();
 
         for(Bootapp bootapp : bootapps) {
-            RestTemplate restTemplate = new RestTemplate();
-
-            AppHealth health = null;
-            try {
-                LOG.debug("Fetching health for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getHealthEndpointUrl() + "'");
-                health = restTemplate.getForObject(bootapp.getHealthEndpointUrl(), AppHealth.class);
-                LOG.debug("Health: " + health.getStatus());
-            } catch (Exception e) {
-                LOG.error("An error occured why trying to fetch health for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getHealthEndpointUrl() + "'", e);
-            }
-
-            AppInfo info = null;
-            try {
-                LOG.debug("Fetching info for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getInfoEndpointUrl() + "'");
-                info = restTemplate.getForObject(bootapp.getInfoEndpointUrl(), AppInfo.class);
-                LOG.debug("Info: " + info.getApp());
-            } catch (Exception e) {
-                LOG.error("An error occured why trying to fetch info for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getInfoEndpointUrl() + "'", e);
-            }
-
-                BootappStatus bootappStatus = new BootappStatus();
-                bootappStatus.setId(bootapp.getId());
-                bootappStatus.setHealth((health != null) ? health.getStatus() : VALUE_NOT_AVAILABLE);
-                bootappStatus.setInfo((info != null) ? info.getApp().toString() : VALUE_NOT_AVAILABLE);
-
-                bootappStatuses.add(bootappStatus);
+            BootappStatus bootappStatus = fetchStatusFromEndpoints(bootapp);
+            bootappStatuses.add(bootappStatus);
         }
 
         return bootappStatuses;
+    }
+
+    /**
+     * API function to return the status (health + info) of a bootapps as JSON.
+     * @return the status (health + info) of a bootapp as JSON
+     */
+    @GetMapping("/api/dashboard/status/{id}")
+    public @ResponseBody BootappStatus getBootappStatus(@PathVariable("id") String id) {
+        BootappStatus bootappStatus = null;
+
+        Bootapp bootapp = findBootappById(id);
+        if(bootapp != null) {
+            bootappStatus = fetchStatusFromEndpoints(bootapp);
+        }
+
+        return bootappStatus;
+    }
+
+    /**
+     * Finds a bootapp in the list of bootapps by its id.
+     * @param id the id
+     * @return the bootapp
+     */
+    private Bootapp findBootappById(String id) {
+        for(Bootapp bootapp : bootapps) {
+            if(bootapp.getId().equals(id)) {
+                return bootapp;
+            }
+        }
+
+        return null;
+    }
+
+    private BootappStatus fetchStatusFromEndpoints(Bootapp bootapp) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        AppHealth health = null;
+        try {
+            LOG.debug("Fetching health for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getHealthEndpointUrl() + "'");
+            health = restTemplate.getForObject(bootapp.getHealthEndpointUrl(), AppHealth.class);
+            LOG.debug("Health: " + health.getStatus());
+        } catch (Exception e) {
+            LOG.error("An error occured why trying to fetch health for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getHealthEndpointUrl() + "'", e);
+        }
+
+        AppInfo info = null;
+        try {
+            LOG.debug("Fetching info for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getInfoEndpointUrl() + "'");
+            info = restTemplate.getForObject(bootapp.getInfoEndpointUrl(), AppInfo.class);
+            LOG.debug("Info: " + info.getApp());
+        } catch (Exception e) {
+            LOG.error("An error occured why trying to fetch info for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getInfoEndpointUrl() + "'", e);
+        }
+
+        BootappStatus bootappStatus = new BootappStatus();
+        bootappStatus.setId(bootapp.getId());
+        bootappStatus.setHealth((health != null) ? health.getStatus() : VALUE_NOT_AVAILABLE);
+        bootappStatus.setInfo((info != null) ? info.getApp().toString() : VALUE_NOT_AVAILABLE);
+
+        return bootappStatus;
     }
 
 }

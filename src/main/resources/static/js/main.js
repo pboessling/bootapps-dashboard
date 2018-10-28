@@ -90,19 +90,36 @@ var APP = APP || (function () {
             });
         },
 
-
+        /**
+         * Enabled the autoreload of the bootapp statuses.
+         */
         enableAutoreload : function () {
             autoreloadTimerId = setInterval(() => APP.reloadAllStatus(), autoreloadInterval);
         },
 
+        /**
+         * Disables the autoreload of the bootapp statuses.
+         */
         disableAutoreload : function () {
             clearInterval(autoreloadTimerId);
         },
 
+        /**
+         * Registers the reload status buttons.
+         */
+        // TODO: Rename to registerReloadStatusButtons.
         registerReloadStatusButton : function () {
             document.querySelector('#bootapps-reload-status-button').addEventListener('click', APP.reloadAllStatus);
+
+            document.querySelectorAll('.bootapp-reload-status-button').forEach(function(elem) {
+                // TODO: Add event listener for each reload button.
+                console.log('bootapp-id: ' + elem.dataset.bootappId);
+            });
         },
 
+        /**
+         * Registers the autoreload checkbox.
+         */
         registerAutoreloadCheckbox : function () {
             document.querySelector('#bootapps-autoreload-checkbox').addEventListener('change', function() {
                 if (this.checked) {
@@ -114,7 +131,7 @@ var APP = APP || (function () {
         },
 
         /**
-         * Initialize the application
+         * Initializes the application
          */
         init : function () {
             APP.reloadAllStatus();

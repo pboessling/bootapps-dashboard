@@ -11,14 +11,14 @@
         <input id="bootapps-autoreload-checkbox" type="checkbox" name="autoreload" th:checked="${autoreload}" />
         <span th:text="'autoreload (every ' + ${autoreloadInterval / 1000} + 's)'"></span>
     </div>
-    <button id="bootapps-reload-status-button" type="button">Reload Status</button>
-
+    <button id="bootapps-reload-status-button" type="button">Reload All Status</button>
     <table id="bootapps" border="1">
         <tr>
             <th>App ID</th>
             <th>Endpoint URLs</th>
             <th>App Health</th>
             <th>App Info</th>
+            <th>Actions</th>
         </tr>
         <tr th:id="'bootapp-' + ${bootapp.id}" class="bootapp" th:each="bootapp : ${bootapps}">
             <td class="bootapp-id" th:text="${bootapp.id}">App ID</td>
@@ -28,6 +28,7 @@
             </td>
             <td class="bootapp-health">N/A</td>
             <td class="bootapp-info">N/A</td>
+            <td><button th:id="'bootapp-' + ${bootapp.id} + '-reload-status-button'" class="bootapp-reload-status-button" type="button" th:attr="data-bootapp-id=${bootapp.id}">Reload Status</button></td>
         </tr>
     </table>
     <script th:inline="javascript">
