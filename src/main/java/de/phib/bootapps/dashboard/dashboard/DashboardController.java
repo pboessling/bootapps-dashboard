@@ -131,7 +131,7 @@ public class DashboardController {
         BootappStatus bootappStatus = new BootappStatus();
         bootappStatus.setId(bootapp.getId());
         bootappStatus.setHealth((health != null) ? health.getStatus() : VALUE_NOT_AVAILABLE);
-        bootappStatus.setInfo((info != null) ? info.getApp().toString() : VALUE_NOT_AVAILABLE);
+        bootappStatus.setInfo((info != null && info.getApp() != null) ? info.getApp().toString() : VALUE_NOT_AVAILABLE);
 
         return bootappStatus;
     }
