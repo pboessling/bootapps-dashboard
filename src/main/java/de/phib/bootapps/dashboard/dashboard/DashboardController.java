@@ -109,23 +109,33 @@ public class DashboardController {
 
     private BootappStatus fetchStatusFromEndpoints(Bootapp bootapp) {
         AppHealth health = null;
-        try {
-            LOG.debug("Fetching health for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getHealthEndpointUrl() + "'");
-            RestTemplate restTemplate = buildRestTemplate(bootapp.getHealthEndpointUsername(), bootapp.getHealthEndpointPassword());
-            health = restTemplate.getForObject(bootapp.getHealthEndpointUrl(), AppHealth.class);
-            LOG.debug("Health: " + health.getStatus());
-        } catch (Exception e) {
-            LOG.error("An error occured why trying to fetch health for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getHealthEndpointUrl() + "'", e);
+        if(bootapp.getHealthEndpointUrl() != null) {
+            try {
+                LOG.debug("Fetching health for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getHealthEndpointUrl() + "'");
+                RestTemplate restTemplate = buildRestTemplate(bootapp.getHealthEndpointUsername(), bootapp.getHealthEndpointPassword());
+                health = restTemplate.getForObject(bootapp.getHealthEndpointUrl(), AppHealth.class);
+                LOG.debug("Health: " + health.getStatus());
+            } catch (Exception e) {
+                LOG.error("An error occured why trying to fetch health for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getHealthEndpointUrl() + "'", e);
+            }
+        } else {
+            LOG.warn("Health endpoint url not configure for bootapp '" + bootapp.getId() + "'");
         }
 
+
         AppInfo info = null;
-        try {
-            LOG.debug("Fetching info for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getInfoEndpointUrl() + "'");
-            RestTemplate restTemplate = buildRestTemplate(bootapp.getInfoEndpointUsername(), bootapp.getInfoEndpointPassword());
-            info = restTemplate.getForObject(bootapp.getInfoEndpointUrl(), AppInfo.class);
-            LOG.debug("Info: " + info.getApp());
-        } catch (Exception e) {
-            LOG.error("An error occured why trying to fetch info for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getInfoEndpointUrl() + "'", e);
+        if(bootapp.getInfoEndpointUrl() != null) {
+            try {
+                LOG.debug("Fetching info for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getInfoEndpointUrl()
+                        + "'");
+                RestTemplate restTemplate = buildRestTemplate(bootapp.getInfoEndpointUsername(), bootapp.getInfoEndpointPassword());
+                info = restTemplate.getForObject(bootapp.getInfoEndpointUrl(), AppInfo.class);
+                LOG.debug("Info: " + info.getApp());
+            } catch (Exception e) {
+                LOG.error("An error occured why trying to fetch info for bootapp '" + bootapp.getId() + "' from url '" + bootapp.getInfoEndpointUrl() + "'", e);
+            }
+        } else {
+            LOG.warn("Info endpoint url not configure for bootapp '" + bootapp.getId() + "'");
         }
 
         BootappStatus bootappStatus = new BootappStatus();
