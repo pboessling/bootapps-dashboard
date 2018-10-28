@@ -41,15 +41,11 @@ public class DashboardController {
 
     /**
      * Returns the dashboard view.
-     * @param autoreloadParam whether the view should automatically be reloaded
      * @param model the model
      * @return the dashboard view
      */
     @GetMapping("/dashboard")
-    public String renderDashboard(@RequestParam(name="autoreload", required=false, defaultValue="false") String autoreloadParam, Model model) {
-        // TODO: Overwrite autoreload via request parameter.
-        //Boolean autoreloadAttribute = autoreloadParam.equals("true");
-        //model.addAttribute("autoreload", autoreloadAttribute);
+    public String renderDashboard(Model model) {
         model.addAttribute("autoreload", this.autoreload);
         model.addAttribute("autoreloadInterval", this.autoreloadInterval);
         model.addAttribute("bootapps", bootapps);

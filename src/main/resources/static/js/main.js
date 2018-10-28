@@ -1,6 +1,7 @@
 var APP = APP || (function () {
 
     var dashboardStatusUrl = '/api/dashboard/status';
+    var autoreloadTimerId;
 
     return {
         // TODO: Delete, if no longer needed.
@@ -89,12 +90,27 @@ var APP = APP || (function () {
             });
         },
 
-        registerReloadStatusButton : function () {
-            document.querySelector('#bootapps-status-reload-button').addEventListener('click', APP.reloadAllStatus);
-        },
 
         enableAutoreload : function () {
-            var autoreloadTimerId = setInterval(() => APP.reloadAllStatus(), autoreloadInterval);
+            autoreloadTimerId = setInterval(() => APP.reloadAllStatus(), autoreloadInterval);
+        },
+
+        disableAutoreload : function () {
+            clearInterval(autoreloadTimerId);
+        },
+
+        registerReloadStatusButton : function () {
+            document.querySelector('#bootapps-reload-status-button').addEventListener('click', APP.reloadAllStatus);
+        },
+
+        registerAutoreloadCheckbox : function () {
+            document.querySelector('#bootapps-autoreload-checkbox').addEventListener('change', function() {
+                if (this.checked) {
+                    APP.enableAutoreload();
+                } else {
+                    APP.disableAutoreload();
+                }
+            });
         },
 
         /**
@@ -102,6 +118,7 @@ var APP = APP || (function () {
          */
         init : function () {
             APP.reloadAllStatus();
+            APP.registerAutoreloadCheckbox();
             APP.registerReloadStatusButton();
 
             if(autoreload) {
