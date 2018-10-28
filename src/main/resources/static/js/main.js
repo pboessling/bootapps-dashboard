@@ -48,7 +48,15 @@ var APP = APP || (function () {
          */
         updateBootappStatusHTML : function (bootappStatus) {
             var bootappElement = document.querySelector('#bootapp-' + bootappStatus.id);
-            bootappElement.querySelector('.bootapp-health').textContent = bootappStatus.health;
+
+            var bootappHealth = bootappStatus.health;
+            bootappElement.querySelector('.bootapp-health').textContent = bootappHealth;
+            if(bootappHealth === 'UP') {
+                bootappElement.style.backgroundColor = 'green';
+            } else  {
+                bootappElement.style.backgroundColor = 'red';
+            }
+
             bootappElement.querySelector('.bootapp-info').textContent = bootappStatus.info;
         },
 
