@@ -3,7 +3,7 @@ package de.phib.bootapps.dashboard.dashboard;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
- * Represents the configuration of a bootapp on the dashboard.
+ * Represents a bootapp on the dashboard.
  */
 public class Bootapp {
 

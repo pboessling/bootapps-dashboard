@@ -17,7 +17,7 @@ public class DashboardProperties {
 
     private int autoreloadInterval;
 
-    private final List<Bootapp> bootapps = new ArrayList<>();
+    private final List<Host> hosts = new ArrayList<>();
 
     /**
      * Returns the value of configuration property autoreload.
@@ -52,11 +52,11 @@ public class DashboardProperties {
     }
 
     /**
-     * Returns a list of bootapps configured in the application properties.
-     * @return a list of bootapps
+     * Returns a list of hosts with bootapps configured in the application properties.
+     * @return a list of hosts with bootapps
      */
-    public List<Bootapp> getBootapps() {
-        return this.bootapps;
+    public List<Host> getHosts() {
+        return this.hosts;
     }
 
 }

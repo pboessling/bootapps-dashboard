@@ -11,7 +11,9 @@ import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Controller for displaying the dashboard view, as well as providing a Web API to interact with the dashboard from the
@@ -22,6 +24,8 @@ public class DashboardController {
 
     private static final Logger LOG = LoggerFactory.getLogger(DashboardController.class);
 
+    private static final String URI_PATTERN_API_DASHBOARD_STATUS = "/api/dashboard/status";
+
     private static final String VALUE_NOT_AVAILABLE = "N/A";
 
     private RestTemplateBuilder restTemplateBuilder;
@@ -30,7 +34,7 @@ public class DashboardController {
 
     private int autoreloadInterval;
 
-    private final List<Bootapp> bootapps;
+    private final List<Host> hosts;
 
     /**
      * Builds a new instance of DashboardController.
@@ -42,7 +46,7 @@ public class DashboardController {
         this.restTemplateBuilder = restTemplateBuilder;
         this.autoreload = dashboardProperties.getAutoreload();
         this.autoreloadInterval = dashboardProperties.getAutoreloadInterval();
-        this.bootapps = dashboardProperties.getBootapps();
+        this.hosts = dashboardProperties.getHosts();
     }
 
     /**
@@ -54,7 +58,7 @@ public class DashboardController {
     public String renderDashboard(Model model) {
         model.addAttribute("autoreload", this.autoreload);
         model.addAttribute("autoreloadInterval", this.autoreloadInterval);
-        model.addAttribute("bootapps", bootapps);
+        model.addAttribute("hosts", this.hosts);
 
         return "dashboard";
     }
@@ -63,28 +67,54 @@ public class DashboardController {
      * API function to return the status (health + info) of all bootapps as JSON.
      * @return the status (health + info) of all bootapps as JSON
      */
-    @GetMapping("/api/dashboard/status")
+    @GetMapping(URI_PATTERN_API_DASHBOARD_STATUS)
     public  @ResponseBody
-    List<BootappStatus> getBootappStatuses() {
-        List<BootappStatus> bootappStatuses = new ArrayList<>();
+    Map<String, List<BootappStatus>> getBootappStatuses() {
+        Map<String, List<BootappStatus>> bootappStatuses = new HashMap<>();
 
-        for(Bootapp bootapp : bootapps) {
-            BootappStatus bootappStatus = fetchStatusFromEndpoints(bootapp);
-            bootappStatuses.add(bootappStatus);
+        for(Host host : hosts) {
+            List<BootappStatus> bootappStatusesByHost = new ArrayList<>();
+
+            for(Bootapp bootapp : host.getBootapps()) {
+                BootappStatus bootappStatus = fetchStatusFromEndpoints(bootapp);
+                bootappStatusesByHost.add(bootappStatus);
+            }
+
+            bootappStatuses.put(host.getId(), bootappStatusesByHost);
         }
 
         return bootappStatuses;
     }
 
     /**
+     * API function to return the status (health + info) of all bootapps of a host as JSON.
+     * @return the status (health + info) of all bootapps of a host as JSON
+     */
+    @GetMapping(URI_PATTERN_API_DASHBOARD_STATUS + "/{hostId}")
+    public @ResponseBody List<BootappStatus> getBootappStatusesByHost(@PathVariable("hostId") String hostId) {
+        List<BootappStatus> bootappStatusesByHost = new ArrayList<>();
+
+        for(Host host : hosts) {
+            if(host.getId().equals(hostId)) {
+                for(Bootapp bootapp : host.getBootapps()) {
+                    BootappStatus bootappStatus = fetchStatusFromEndpoints(bootapp);
+                    bootappStatusesByHost.add(bootappStatus);
+                }
+            }
+        }
+
+        return bootappStatusesByHost;
+    }
+
+    /**
      * API function to return the status (health + info) of a bootapps as JSON.
      * @return the status (health + info) of a bootapp as JSON
      */
-    @GetMapping("/api/dashboard/status/{id}")
-    public @ResponseBody BootappStatus getBootappStatus(@PathVariable("id") String id) {
+    @GetMapping("/api/dashboard/status/{hostId}/{bootappId}")
+    public @ResponseBody BootappStatus getBootappStatus(@PathVariable("hostId") String hostId, @PathVariable("bootappId") String bootappId) {
         BootappStatus bootappStatus = null;
 
-        Bootapp bootapp = findBootappById(id);
+        Bootapp bootapp = findBootappById(hostId, bootappId);
         if(bootapp != null) {
             bootappStatus = fetchStatusFromEndpoints(bootapp);
         }
@@ -94,13 +124,17 @@ public class DashboardController {
 
     /**
      * Finds a bootapp in the list of bootapps by its id.
-     * @param id the id
+     * @param bootapId the id
      * @return the bootapp
      */
-    private Bootapp findBootappById(String id) {
-        for(Bootapp bootapp : bootapps) {
-            if(bootapp.getId().equals(id)) {
-                return bootapp;
+    private Bootapp findBootappById(String hostId, String bootapId) {
+        for(Host host : hosts) {
+            if(host.getId().equals(hostId)) {
+                for (Bootapp bootapp : host.getBootapps()) {
+                    if (bootapp.getId().equals(bootapId)) {
+                        return bootapp;
+                    }
+                }
             }
         }
 

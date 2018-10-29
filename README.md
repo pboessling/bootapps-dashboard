@@ -7,6 +7,7 @@ Work in progress...
 ## Requirements
 
 - JDK 8
+- ECMAScript 6 compatible browser
 
 ## How to configure
 

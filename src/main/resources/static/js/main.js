@@ -7,17 +7,21 @@ var APP = APP || (function () {
         /**
          * Reload status for a specific bootapp.
          * @param element the HTML element encapsulating the bootapp
-         * @param bootappId the name of the bootapp
+         * @param reloadId the reload id, pattern: <hostId>:<bootappId>
          */
-        reloadStatus : function (element, bootappId) {
-            if(element && bootappId) {
-                console.debug('Reloading status for bootapp ' + bootappId);
+        reloadStatus : function (element, reloadId) {
+            if(element && reloadId) {
+                console.debug('Reloading status for bootapp ' + reloadId);
 
-                fetch(dashboardStatusUrl + '/' + bootappId).then(response => {
+                var reloadIdParts = reloadId.split(':');
+                var hostId = reloadIdParts[0];
+                var bootappId = reloadIdParts[1];
+
+                fetch(dashboardStatusUrl + '/' + hostId + '/' + bootappId).then(response => {
                     return response.json();
                 }).then(data => {
                     console.debug(data);
-                    APP.updateBootappStatusHTML(data);
+                    APP.updateBootappStatusHTML(hostId, data);
                 }).catch(error => {
                     console.error(error);
                 });
@@ -34,8 +38,10 @@ var APP = APP || (function () {
                 return response.json();
             }).then(data => {
                 console.debug(data);
-                for (var entry in data) {
-                    APP.updateBootappStatusHTML(data[entry]);
+                for (var host in data) {
+                    for (var bootapp in data[host]) {
+                        APP.updateBootappStatusHTML(host, data[host][bootapp]);
+                    }
                 }
             }).catch(error => {
                 console.error(error);
@@ -44,10 +50,11 @@ var APP = APP || (function () {
 
         /**
          * Updates the bootapp status in the HTML.
+         * @param host the host of the bootapp
          * @param bootappStatus the bootapp status
          */
-        updateBootappStatusHTML : function (bootappStatus) {
-            var bootappElement = document.querySelector('#bootapp-' + bootappStatus.id);
+        updateBootappStatusHTML : function (host, bootappStatus) {
+            var bootappElement = document.querySelector('#bootapp-' + host + '-' + bootappStatus.id);
 
             var bootappHealth = bootappStatus.health;
             bootappElement.querySelector('.bootapp-health').textContent = bootappHealth;
@@ -82,7 +89,7 @@ var APP = APP || (function () {
 
             document.querySelectorAll('.bootapp-reload-status-button').forEach(function(button) {
                 button.addEventListener('click', event => {
-                    APP.reloadStatus(event.srcElement, event.srcElement.dataset.bootappId)
+                    APP.reloadStatus(event.srcElement, event.srcElement.dataset.reloadId)
                 });
             });
         },
