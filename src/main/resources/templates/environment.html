@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bootapps Dashboard</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+</head>
+<body>
+    <h1>Bootapps Dashboard</h1>
+    <h2>Environments</h2>
+    <ul th:each="environmentId : ${environmentIds}">
+        <li>
+            <a th:href="@{'/dashboard/' + ${environmentId}}" th:text="${environmentId}"></a>
+        </li>
+    </ul>
+    <div>
+        <input id="bootapps-autoreload-checkbox" type="checkbox" name="autoreload" th:checked="${autoreload}" />
+        <span th:text="'autoreload (every ' + ${autoreloadInterval / 1000} + 's)'"></span>
+    </div>
+    <button id="bootapps-reload-status-button" type="button">Reload All Status</button>
+
+    <div th:each="host : ${hosts}">
+        <h2 th:text="${host.key}"></h2>
+        <table id="bootapps" border="1">
+            <tr>
+                <th>App ID</th>
+                <th>Endpoint URLs</th>
+                <th>App Health</th>
+                <th>App Info</th>
+                <th>Actions</th>
+            </tr>
+            <tr th:id="'bootapp-' + ${host.key} + '-' + ${bootapp.id}" class="bootapp" th:each="bootapp : ${host.value}">
+                <td class="bootapp-id" th:text="${bootapp.id}">App ID</td>
+                <td class="bootapp-endpoints">
+                    <a th:href="${bootapp.healthEndpointUrl}">Health</a> |
+                    <a th:href="${bootapp.infoEndpointUrl}">Info</a>
+                </td>
+                <td class="bootapp-health">N/A</td>
+                <td class="bootapp-info">N/A</td>
+                <td><button th:id="'bootapp-' + ${host.key} + '-' + ${bootapp.id} + '-reload-status-button'" class="bootapp-reload-status-button" type="button" th:attr="data-reload-id=${environmentId} + ':' + ${host.key} + ':' + ${bootapp.id}">Reload Status</button></td>
+            </tr>
+        </table>
+    </div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        var autoreload = /*[[${autoreload}]]*/ false;
+        var autoreloadInterval = /*[[${autoreloadInterval}]]*/ 30;
+        var environmentId = /*[[${environmentId}]]*/ '';
+
+        /*]]>*/
+    </script>
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

@@ -1,10 +1,12 @@
 package de.phib.bootapps.dashboard.dashboard;
 
+import de.phib.bootapps.dashboard.dashboard.model.Bootapp;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The configuration of the dashboard configured in the application properties.
@@ -17,7 +19,7 @@ public class DashboardProperties {
 
     private int autoreloadInterval;
 
-    private final List<Host> hosts = new ArrayList<>();
+    private final Map<String, Map<String, List<Bootapp>>> bootapps = new HashMap<>();
 
     /**
      * Returns the value of configuration property autoreload.
@@ -52,11 +54,11 @@ public class DashboardProperties {
     }
 
     /**
-     * Returns a list of hosts with bootapps configured in the application properties.
-     * @return a list of hosts with bootapps
+     * Returns the value of configuration property bootapps.
+     * @return the value of configuration property bootapps
      */
-    public List<Host> getHosts() {
-        return this.hosts;
+    public Map<String, Map<String, List<Bootapp>>> getBootapps() {
+        return this.bootapps;
     }
 
 }

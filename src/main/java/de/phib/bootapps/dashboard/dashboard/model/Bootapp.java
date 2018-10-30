@@ -1,4 +1,4 @@
-package de.phib.bootapps.dashboard.dashboard;
+package de.phib.bootapps.dashboard.dashboard.model;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 

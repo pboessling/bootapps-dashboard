@@ -1,4 +1,4 @@
-package de.phib.bootapps.dashboard.dashboard;
+package de.phib.bootapps.dashboard.dashboard.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.ToStringBuilder;

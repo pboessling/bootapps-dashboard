@@ -1,23 +1,24 @@
 var APP = APP || (function () {
 
-    var dashboardStatusUrl = '/api/dashboard/status';
+    var dashboardStatusUrl = '/api/status';
     var autoreloadTimerId;
 
     return {
         /**
          * Reload status for a specific bootapp.
          * @param element the HTML element encapsulating the bootapp
-         * @param reloadId the reload id, pattern: <hostId>:<bootappId>
+         * @param reloadId the reload id, pattern: <environmentId>:<hostId>:<bootappId>
          */
         reloadStatus : function (element, reloadId) {
             if(element && reloadId) {
                 console.debug('Reloading status for bootapp ' + reloadId);
 
                 var reloadIdParts = reloadId.split(':');
-                var hostId = reloadIdParts[0];
-                var bootappId = reloadIdParts[1];
+                var environmentId = reloadIdParts[0];
+                var hostId = reloadIdParts[1];
+                var bootappId = reloadIdParts[2];
 
-                fetch(dashboardStatusUrl + '/' + hostId + '/' + bootappId).then(response => {
+                fetch(dashboardStatusUrl + '/' + environmentId + '/' + hostId + '/' + bootappId).then(response => {
                     return response.json();
                 }).then(data => {
                     console.debug(data);
@@ -34,7 +35,7 @@ var APP = APP || (function () {
         reloadAllStatus : function () {
             console.debug('Reloading all bootapp statuses');
 
-            fetch(dashboardStatusUrl).then(response => {
+            fetch(dashboardStatusUrl + '/' + environmentId).then(response => {
                 return response.json();
             }).then(data => {
                 console.debug(data);
