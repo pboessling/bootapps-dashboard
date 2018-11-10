@@ -1,5 +1,6 @@
 package de.phib.bootapps.dashboard.dashboard;
 
+import de.phib.bootapps.dashboard.InfoAppProperties;
 import de.phib.bootapps.dashboard.dashboard.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,15 +22,18 @@ public class DashboardController {
 
     private Map<String, Map<String, List<Bootapp>>> bootapps;
 
+    private String appVersion;
+
     /**
      * Builds a new instance of DashboardController.
      * @param dashboardProperties the DashboardProperties
      */
     @Autowired
-    public DashboardController(DashboardProperties dashboardProperties) {
+    public DashboardController(DashboardProperties dashboardProperties, InfoAppProperties infoAppProperties) {
         this.autoreload = dashboardProperties.getAutoreload();
         this.autoreloadInterval = dashboardProperties.getAutoreloadInterval();
         this.bootapps = dashboardProperties.getBootapps();
+        this.appVersion = infoAppProperties.getVersion();
     }
 
     /**
@@ -40,6 +44,7 @@ public class DashboardController {
     @GetMapping("/dashboard")
     public String renderDashboard(Model model) {
         model.addAttribute("environmentIds", this.bootapps.keySet());
+        model.addAttribute("appVersion", this.appVersion);
 
         return "dashboard";
     }
@@ -56,6 +61,7 @@ public class DashboardController {
         model.addAttribute("environmentIds", this.bootapps.keySet());
         model.addAttribute("hosts", this.bootapps.get(environmentId));
         model.addAttribute("environmentId", environmentId);
+        model.addAttribute("appVersion", this.appVersion);
 
         return "environment";
     }

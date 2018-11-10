@@ -30,7 +30,7 @@ public class DashboardProperties {
     }
 
     /**
-     * Sets the value of configuration property autoreload
+     * Sets the value of configuration property autoreload.
      * @param autoreload the value of configuration property autoreload
      */
     public void setAutoreload(boolean autoreload) {
