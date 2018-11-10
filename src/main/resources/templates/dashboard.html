@@ -3,15 +3,37 @@
 <head>
     <title>Bootapps Dashboard</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bulma.min.css}" rel="stylesheet">
     <link th:href="@{/css/main.css}" rel="stylesheet">
 </head>
 <body>
-    <h1>Bootapps Dashboard</h1>
-    <h2>Environments</h2>
-    <ul th:each="environmentId : ${environmentIds}">
-        <li>
-            <a th:href="@{'/dashboard/' + ${environmentId}}" th:text="${environmentId}"></a>
-        </li>
-    </ul>
+<nav id="navbar" class="navbar has-shadow is-spaced">
+    <div class="container">
+        <div class="navbar-brand">
+            <p class="navbar-item"><strong>Bootapps Dashboard</strong></p>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-start">
+                <th:block th:each="environmentId : ${environmentIds}">
+                    <p class="navbar-item control">
+                        <a class="button" th:href="@{'/dashboard/' + ${environmentId}}" th:text="${environmentId}"></a>
+                    </p>
+                </th:block>
+            </div>
+        </div>
+    </div>
+</nav>
+<main>
+    <section class="section"></section>
+</main>
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>
+            <strong>Bootapps Dashboard</strong> v1.0-SNAPSHOT - This project is maintained by <a href="https://github.com/pboessling/">Philippe B&ouml;&szlig;ling</a>.
+        </p>
+    </div>
+</footer>
+<script th:src="@{/js/main.js}"></script>
 </body>
 </html>

@@ -58,11 +58,12 @@ var APP = APP || (function () {
             var bootappElement = document.querySelector('#bootapp-' + host + '-' + bootappStatus.id);
 
             var bootappHealth = bootappStatus.health;
-            bootappElement.querySelector('.bootapp-health').textContent = bootappHealth;
+            var bootappHealthElement = bootappElement.querySelectorAll('.bootapp-health span')[1];
+            bootappHealthElement.textContent = bootappHealth;
             if(bootappHealth === 'UP') {
-                bootappElement.style.backgroundColor = 'green';
+                bootappHealthElement.className = 'tag is-success';
             } else  {
-                bootappElement.style.backgroundColor = 'red';
+                bootappHealthElement.className = 'tag is-danger';
             }
 
             bootappElement.querySelector('.bootapp-info').textContent = bootappStatus.info;

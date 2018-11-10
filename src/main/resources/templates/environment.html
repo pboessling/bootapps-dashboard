@@ -3,44 +3,89 @@
 <head>
     <title>Bootapps Dashboard</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bulma.min.css}" rel="stylesheet">
     <link th:href="@{/css/main.css}" rel="stylesheet">
 </head>
 <body>
-    <h1>Bootapps Dashboard</h1>
-    <h2>Environments</h2>
-    <ul th:each="environmentId : ${environmentIds}">
-        <li>
-            <a th:href="@{'/dashboard/' + ${environmentId}}" th:text="${environmentId}"></a>
-        </li>
-    </ul>
-    <div>
-        <input id="bootapps-autoreload-checkbox" type="checkbox" name="autoreload" th:checked="${autoreload}" />
-        <span th:text="'autoreload (every ' + ${autoreloadInterval / 1000} + 's)'"></span>
-    </div>
-    <button id="bootapps-reload-status-button" type="button">Reload All Status</button>
-
-    <div th:each="host : ${hosts}">
-        <h2 th:text="${host.key}"></h2>
-        <table id="bootapps" border="1">
-            <tr>
-                <th>App ID</th>
-                <th>Endpoint URLs</th>
-                <th>App Health</th>
-                <th>App Info</th>
-                <th>Actions</th>
-            </tr>
-            <tr th:id="'bootapp-' + ${host.key} + '-' + ${bootapp.id}" class="bootapp" th:each="bootapp : ${host.value}">
-                <td class="bootapp-id" th:text="${bootapp.id}">App ID</td>
-                <td class="bootapp-endpoints">
-                    <a th:href="${bootapp.healthEndpointUrl}">Health</a> |
-                    <a th:href="${bootapp.infoEndpointUrl}">Info</a>
-                </td>
-                <td class="bootapp-health">N/A</td>
-                <td class="bootapp-info">N/A</td>
-                <td><button th:id="'bootapp-' + ${host.key} + '-' + ${bootapp.id} + '-reload-status-button'" class="bootapp-reload-status-button" type="button" th:attr="data-reload-id=${environmentId} + ':' + ${host.key} + ':' + ${bootapp.id}">Reload Status</button></td>
-            </tr>
-        </table>
-    </div>
+    <nav id="navbar" class="navbar has-shadow is-spaced">
+        <div class="container">
+            <div class="navbar-brand">
+                <p class="navbar-item"><strong>Bootapps Dashboard</strong></p>
+            </div>
+            <div class="navbar-menu">
+                <div class="navbar-start">
+                    <th:block th:each="environmentId : ${environmentIds}">
+                        <p class="navbar-item control">
+                            <a class="button" th:href="@{'/dashboard/' + ${environmentId}}" th:text="${environmentId}"></a>
+                        </p>
+                    </th:block>
+                </div>
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <div class="field is-grouped is-grouped-multiline">
+                            <p class="control">
+                                <input id="bootapps-autoreload-checkbox" type="checkbox" name="autoreload" th:checked="${autoreload}" />
+                                <span th:text="'autoreload (every ' + ${autoreloadInterval / 1000} + 's)'"></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="navbar-item">
+                        <button id="bootapps-reload-status-button" class="button" type="button">Reload All Status</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <section class="section">
+            <div class="container">
+                <h1 class="title" th:text="${environmentId}"></h1>
+            </div>
+        </section>
+        <section class="section is-paddingless">
+            <div class="container" th:each="host : ${hosts}">
+                <hr class="hr" />
+                <div class="container">
+                <h2 class="title is-4" th:text="${host.key}"></h2>
+                <table id="bootapps" class="table is-bordered is-striped is-fullwidth">
+                    <tr>
+                        <th width="20%">App ID</th>
+                        <th width="10%">Actuators</th>
+                        <th width="10%">App Health</th>
+                        <th width="50%">App Info</th>
+                        <th width="10%">Actions</th>
+                    </tr>
+                    <tr th:id="'bootapp-' + ${host.key} + '-' + ${bootapp.id}" class="bootapp" th:each="bootapp : ${host.value}">
+                        <td class="bootapp-id" th:text="${bootapp.id}">App ID</td>
+                        <td class="bootapp-endpoints">
+                            <a th:href="${bootapp.healthEndpointUrl}">Health</a> |
+                            <a th:href="${bootapp.infoEndpointUrl}">Info</a>
+                        </td>
+                        <td class="bootapp-health">
+                            <div class="tags has-addons">
+                                <span class="tag">Status</span>
+                                <span class="tag is-danger bootapp-health-value">N/A</span>
+                            </div>
+                        </td>
+                        <td class="bootapp-info">N/A</td>
+                        <td>
+                            <button th:id="'bootapp-' + ${host.key} + '-' + ${bootapp.id} + '-reload-status-button'" class="button bootapp-reload-status-button" type="button" th:attr="data-reload-id=${environmentId} + ':' + ${host.key} + ':' + ${bootapp.id}">Reload Status</button>
+                        </td>
+                    </tr>
+                </table>
+                </div>
+            </div>
+        </section>
+        <section class="section"></section>
+    </main>
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                <strong>Bootapps Dashboard</strong> v1.0-SNAPSHOT - This project is maintained by <a href="https://github.com/pboessling/">Philippe B&ouml;&szlig;ling</a>.
+            </p>
+        </div>
+    </footer>
     <script th:inline="javascript">
         /*<![CDATA[*/
 
