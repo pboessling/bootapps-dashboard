@@ -48,41 +48,42 @@
                 <h1 class="title" th:text="${environmentId}"></h1>
             </div>
         </section>
-        <section class="section is-paddingless">
+        <section class="section is-paddingless-top">
             <div class="container" th:each="host : ${hosts}">
                 <hr class="hr" />
                 <div class="container">
                 <h2 class="title is-4" th:text="${host.key}"></h2>
-                <table id="bootapps" class="table is-bordered is-striped is-fullwidth">
-                    <tr>
-                        <th width="20%">App ID</th>
-                        <th width="10%">Actuators</th>
-                        <th width="10%">App Health</th>
-                        <th width="50%">App Info</th>
-                        <th width="10%">Actions</th>
-                    </tr>
-                    <tr th:id="'bootapp-' + ${host.key} + '-' + ${bootapp.id}" class="bootapp" th:each="bootapp : ${host.value}">
-                        <td class="bootapp-id" th:text="${bootapp.id}">App ID</td>
-                        <td class="bootapp-endpoints">
-                            <a th:href="${bootapp.healthEndpointUrl}">Health</a> |
-                            <a th:href="${bootapp.infoEndpointUrl}">Info</a>
-                        </td>
-                        <td class="bootapp-health">
-                            <div class="tags has-addons">
-                                <span class="tag">Status</span>
-                                <span class="tag is-danger bootapp-health-value">N/A</span>
-                            </div>
-                        </td>
-                        <td class="bootapp-info">N/A</td>
-                        <td>
-                            <button th:id="'bootapp-' + ${host.key} + '-' + ${bootapp.id} + '-reload-status-button'" class="button bootapp-reload-status-button" type="button" th:attr="data-reload-id=${environmentId} + ':' + ${host.key} + ':' + ${bootapp.id}">Reload Status</button>
-                        </td>
-                    </tr>
-                </table>
+                    <div class="is-overflow">
+                        <table id="bootapps" class="table is-bordered is-striped is-fullwidth">
+                            <tr>
+                                <th width="20%">App ID</th>
+                                <th width="10%">Actuators</th>
+                                <th width="10%">App Health</th>
+                                <th width="50%">App Info</th>
+                                <th width="10%">Actions</th>
+                            </tr>
+                            <tr th:id="'bootapp-' + ${host.key} + '-' + ${bootapp.id}" class="bootapp" th:each="bootapp : ${host.value}">
+                                <td class="bootapp-id" th:text="${bootapp.id}">App ID</td>
+                                <td class="bootapp-endpoints">
+                                    <a th:href="${bootapp.healthEndpointUrl}">Health</a> |
+                                    <a th:href="${bootapp.infoEndpointUrl}">Info</a>
+                                </td>
+                                <td class="bootapp-health">
+                                    <div class="tags has-addons">
+                                        <span class="tag">Status</span>
+                                        <span class="tag is-danger bootapp-health-value">N/A</span>
+                                    </div>
+                                </td>
+                                <td class="bootapp-info">N/A</td>
+                                <td>
+                                    <button th:id="'bootapp-' + ${host.key} + '-' + ${bootapp.id} + '-reload-status-button'" class="button bootapp-reload-status-button" type="button" th:attr="data-reload-id=${environmentId} + ':' + ${host.key} + ':' + ${bootapp.id}">Reload Status</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>
-        <section class="section"></section>
     </main>
     <footer class="footer">
         <div class="content has-text-centered">
