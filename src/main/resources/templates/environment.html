@@ -12,8 +12,13 @@
         <div class="container">
             <div class="navbar-brand">
                 <p class="navbar-item"><strong>Bootapps Dashboard</strong></p>
+                <div id="navbarBurger" class="navbar-burger burger" data-target="navMenuIndex">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
-            <div class="navbar-menu">
+            <div id="navMenuIndex" class="navbar-menu">
                 <div class="navbar-start">
                     <th:block th:each="environmentId : ${environmentIds}">
                         <p class="navbar-item control">

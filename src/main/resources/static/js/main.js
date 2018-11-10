@@ -84,6 +84,27 @@ var APP = APP || (function () {
         },
 
         /**
+         * Registers the burger icon in the mobile navbar.
+         */
+        registerNavbarBurger : function () {
+            document.querySelector('#navbarBurger').addEventListener('click', function() {
+                var navbarBurger = document.querySelector('#navbarBurger');
+                if(navbarBurger.classList.contains('is-active')) {
+                    navbarBurger.classList.remove('is-active');
+                } else {
+                    navbarBurger.classList.add('is-active');
+                }
+
+                var navMenuIndex =  document.querySelector('#navMenuIndex');
+                if(navMenuIndex.classList.contains('is-active')) {
+                    navMenuIndex.classList.remove('is-active');
+                } else {
+                    navMenuIndex.classList.add('is-active');
+                }
+            });
+        },
+
+        /**
          * Registers the reload status buttons.
          */
         registerReloadStatusButtons : function () {
@@ -113,6 +134,7 @@ var APP = APP || (function () {
          * Initializes the application
          */
         init : function () {
+            APP.registerNavbarBurger();
             APP.reloadAllStatus();
             APP.registerAutoreloadCheckbox();
             APP.registerReloadStatusButtons();
