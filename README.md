@@ -2,6 +2,8 @@
 
 A simple dashboard for displaying health status and application info of multiple Spring Boot applications.
 
+![Bootapps Dashboard](docs/img/bootapps-dashboard.png)
+
 ## Requirements
 
 - JDK 8
