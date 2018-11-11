@@ -1,0 +1,39 @@
+info:
+  app:
+    name: Bootapps Dashboard
+    version: 1.0-SNAPSHOT
+server:
+  port: 8080
+dashboard:
+  autoreload: false
+  autoreload-interval: 30000
+  bootapps:
+    dev:
+      host1:
+      - id: bootapps-dashboard
+        health-endpoint-url: http://localhost:8080/actuator/health
+        info-endpoint-url: http://localhost:8080/actuator/info
+      - id: demo-app
+        health-endpoint-url: http://localhost:8081/actuator/health
+        health-endpoint-username: user
+        health-endpoint-password: password
+        info-endpoint-url: http://localhost:8081/actuator/info
+        info-endpoint-username: user
+        info-endpoint-password: password
+      host2:
+      - id: demo-app
+        health-endpoint-url: http://localhost:8081/actuator/health
+        health-endpoint-username: user
+        health-endpoint-password: password
+        info-endpoint-url: http://localhost:8081/actuator/info
+        info-endpoint-username: user
+        info-endpoint-password: password
+    prod:
+      host1:
+      - id: demo-app
+        health-endpoint-url: http://localhost:8081/actuator/health
+        health-endpoint-username: user
+        health-endpoint-password: password
+        info-endpoint-url: http://localhost:8081/actuator/info
+        info-endpoint-username: user
+        info-endpoint-password: password
