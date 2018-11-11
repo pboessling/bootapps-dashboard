@@ -15,9 +15,9 @@ import java.util.Map;
 @ConfigurationProperties("dashboard")
 public class DashboardProperties {
 
-    private boolean autoreload;
+    private boolean autoreload = false;
 
-    private int autoreloadInterval;
+    private int autoreloadInterval = 30000;
 
     private final Map<String, Map<String, List<Bootapp>>> bootapps = new HashMap<>();
 
