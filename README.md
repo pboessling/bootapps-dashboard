@@ -2,18 +2,32 @@
 
 A simple dashboard for displaying health status and application info of multiple Spring Boot applications.
 
-Work in progress...
-
 ## Requirements
 
 - JDK 8
 - ECMAScript 6 compatible browser
 
+## How to build and run
+
+Run from source:
+
+```
+./mvnw spring-boot:run
+```
+
+Build:
+
+```
+./mvnw package
+```
+
+Run:
+
+```
+java -jar target/bootapps-dashboard-1.0-SNAPSHOT.jar
+```
+
 ## How to configure
-
-TBD
-
-## How to run
 
 TBD
 
