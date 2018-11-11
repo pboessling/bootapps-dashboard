@@ -79,7 +79,6 @@ There are some properties with default values, that can be overwritten.
 | ------------- | ------------- | ------------- |
 | autoreload | false | Whether the status of the bootapps on the dashboard should automatically be reloaded. |
 | autoreload-interval | 30000 | If autoreload is enabled, the interval in milliseconds between two reloads. |
-| bootapps | \<none\> | Connection details for the bootapps to be displayed on the dashboard. |
 
 Example:
 ```yaml
