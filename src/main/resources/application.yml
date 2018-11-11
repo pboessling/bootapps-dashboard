@@ -1,10 +1,9 @@
-server:
-  port: 8080
 info:
   app:
     name: Bootapps Dashboard
     version: 1.0-SNAPSHOT
-    deploydate: 2018-10-26T10:13:57+00:00
+server:
+  port: 8080
 dashboard:
   autoreload: false
   autoreload-interval: 30000
