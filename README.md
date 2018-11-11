@@ -43,7 +43,7 @@ java -jar bootapps-dashboard-1.0-SNAPSHOT.jar
 
 If the external properties file has a different name and/or is located in a different folder than the one from which the
 application is started, the location of all properties files, both the one on the classpath and the external one in the 
-filesystem need to be provided as additional parameters, to the `java -jar` command, in order to be picked up.
+filesystem needs to be provided as additional parameter, in order to be picked up, when starting the application.
 
 Example:
 ```
