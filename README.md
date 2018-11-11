@@ -116,11 +116,11 @@ dashboard:
         info-endpoint-url: http://localhost:8081/actuator/info
       host2:
       - id: demo-app-2
-        health-endpoint-url: http://localhost:8081/actuator/health
-        info-endpoint-url: http://localhost:8081/actuator/info
+        health-endpoint-url: http://localhost:8082/actuator/health
+        info-endpoint-url: http://localhost:8082/actuator/info
     prod:
       host1:
-      - id: demo-app-3
+      - id: demo-app-1
         health-endpoint-url: http://localhost:8081/actuator/health
         health-endpoint-username: user
         health-endpoint-password: password
