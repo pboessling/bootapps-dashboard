@@ -131,7 +131,11 @@ dashboard:
 
 ## Changelog
 
-**v1.0**
+## v1.1
+
+* Added loading animations for when the status of one or all bootapps is loading.
+
+## v1.0
 
 * Initial release.
 

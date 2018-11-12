@@ -5,3 +5,26 @@
 .is-paddingless-top {
     padding-top: 0px;
 }
+
+.element.is-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.element.is-loading::after {
+    -webkit-animation: spinAround 500ms infinite linear;
+    animation: spinAround 500ms infinite linear;
+    border: 2px solid #dbdbdb;
+    border-radius: 290486px;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    content: "";
+    display: block;
+    position: absolute;
+    top: calc(50% - 1em);
+    left: calc(50% - 1em);
+    width: 2em;
+    height: 2em;
+    border-width: 0.25em;
+}

@@ -9,7 +9,7 @@ var APP = APP || (function () {
          * @param element the HTML element encapsulating the bootapp
          * @param reloadId the reload id, pattern: <environmentId>:<hostId>:<bootappId>
          */
-        reloadStatus : function (element, reloadId) {
+        reloadStatus : function (element, reloadId, callback) {
             if(element && reloadId) {
                 console.debug('Reloading status for bootapp ' + reloadId);
 
@@ -23,6 +23,7 @@ var APP = APP || (function () {
                 }).then(data => {
                     console.debug(data);
                     APP.updateBootappStatusHTML(hostId, data);
+                    if(callback) callback();
                 }).catch(error => {
                     console.error(error);
                 });
@@ -32,7 +33,7 @@ var APP = APP || (function () {
         /**
          * Reload status for all bootapps.
          */
-        reloadAllStatus : function () {
+        reloadAllStatus : function (callback) {
             console.debug('Reloading all bootapp statuses');
 
             fetch(dashboardStatusUrl + '/' + environmentId).then(response => {
@@ -44,6 +45,7 @@ var APP = APP || (function () {
                         APP.updateBootappStatusHTML(host, data[host][bootapp]);
                     }
                 }
+                if(callback) callback();
             }).catch(error => {
                 console.error(error);
             });
@@ -108,11 +110,21 @@ var APP = APP || (function () {
          * Registers the reload status buttons.
          */
         registerReloadStatusButtons : function () {
-            document.querySelector('#bootapps-reload-status-button').addEventListener('click', APP.reloadAllStatus);
+            var reloadAllStatusButton = document.querySelector('#bootapps-reload-status-button');
+            reloadAllStatusButton.addEventListener('click', event => {
+                reloadAllStatusButton.classList.add('is-loading');
+                APP.reloadAllStatus(function() {
+                    reloadAllStatusButton.classList.remove('is-loading');
+                });
+            });
 
             document.querySelectorAll('.bootapp-reload-status-button').forEach(function(button) {
                 button.addEventListener('click', event => {
-                    APP.reloadStatus(event.srcElement, event.srcElement.dataset.reloadId)
+                    button.classList.add('is-loading');
+                    APP.reloadStatus(event.srcElement, event.srcElement.dataset.reloadId, function() {
+                        button.classList.remove('is-loading');
+                    });
+
                 });
             });
         },
@@ -135,7 +147,12 @@ var APP = APP || (function () {
          */
         init : function () {
             APP.registerNavbarBurger();
-            APP.reloadAllStatus();
+            APP.reloadAllStatus(function() {
+                document.querySelectorAll('.bootapp-health').forEach(element => {
+                    element.classList.remove('is-loading');
+                });
+
+            });
             APP.registerAutoreloadCheckbox();
             APP.registerReloadStatusButtons();
 
